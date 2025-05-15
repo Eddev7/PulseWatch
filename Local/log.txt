@@ -1,0 +1,1 @@
+[2025-05-15 11:06:26] ❌ Não foi possível encontrar o executável automaticamente.
