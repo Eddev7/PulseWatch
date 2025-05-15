@@ -8,12 +8,14 @@ import threading
 import json
 import tkinter as tk
 from tkinter import simpledialog, messagebox
+from dotenv import load_dotenv
+load_dotenv()
 
 PROCESS_NAME = "ServUni2.exe"
 DEFAULT_EXECUTABLE_PATH = r"C:\Program Files (x86)\Gertec\ServUni2\ServUni2.exe"
 RESTART_INTERVAL = 10800  # 3 horas
 HEARTBEAT_INTERVAL = 120  # 2 minutos
-API_URL = "http://localhost:3000/heartbeat"
+API_URL = os.getenv("API_URL")
 CONFIG_FILE = "config.json"
 
 def log(message):

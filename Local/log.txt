@@ -1,1 +1,4 @@
 [2025-05-15 11:06:26] ❌ Não foi possível encontrar o executável automaticamente.
+[2025-05-15 11:40:07] ❌ Não foi possível encontrar o executável automaticamente.
+[2025-05-15 11:40:11] ❌ Não foi possível encontrar o executável automaticamente.
+[2025-05-15 11:45:03] ❌ Não foi possível encontrar o executável automaticamente.
