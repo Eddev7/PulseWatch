@@ -11,12 +11,12 @@ from tkinter import simpledialog, messagebox
 from dotenv import load_dotenv
 load_dotenv()
 
-PROCESS_NAME = "ServUni2.exe"
-DEFAULT_EXECUTABLE_PATH = r"C:\Program Files (x86)\Gertec\ServUni2\ServUni2.exe"
+PROCESS_NAME = # Nome do processo a ser monitorado
+DEFAULT_EXECUTABLE_PATH = # Caminho padrão do executável
 RESTART_INTERVAL = 10800  # 3 horas
 HEARTBEAT_INTERVAL = 120  # 2 minutos
-API_URL = os.getenv("API_URL")
-CONFIG_FILE = "config.json"
+API_URL = # URL da API para enviar o heartbeat
+CONFIG_FILE = "config.json" # Caminho do arquivo de configuração
 
 def log(message):
     with open("log.txt", "a", encoding="utf-8") as f:
