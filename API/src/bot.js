@@ -24,7 +24,8 @@ if (!BOT_TOKEN) {
     );
 
     // --- ADICIONADO AQUI: Verifica se é um chat de grupo ou supergrupo ---
-    const isGroupChat = ctx.chat.type === 'group' || ctx.chat.type === 'supergroup';
+    const isGroupChat =
+      ctx.chat.type === "group" || ctx.chat.type === "supergroup";
 
     // Verifica se a mensagem é "status" (sem o comando /) E se é em um chat de grupo/supergrupo
     if (isGroupChat && ctx.message.text.toLowerCase() === "status") {
@@ -40,9 +41,18 @@ if (!BOT_TOKEN) {
 
         let statusMessage = "Status das Lojas:\n";
         rows.forEach((row) => {
-          const ultimoPing = row.ultimo_ping
-            ? new Date(row.ultimo_ping).toLocaleString()
-            : "Nunca pingou";
+          let ultimoPing;
+          if (row.ultimo_ping) {
+            // Ajusta para o fuso horário de Brasília (UTC-3)
+            const date = new Date(row.ultimo_ping);
+            // Corrige para UTC-3 (Brasília)
+            const brasiliaDate = new Date(date.getTime() - 3 * 60 * 60 * 1000);
+            ultimoPing = brasiliaDate.toLocaleString("pt-BR", {
+              timeZone: "America/Sao_Paulo",
+            });
+          } else {
+            ultimoPing = "Nunca pingou";
+          }
           const statusEmoji = row.status === "online" ? "✅" : "❌";
           statusMessage += `${statusEmoji} Loja ${row.loja_id}: ${row.status} (último ping: ${ultimoPing})\n`;
         });
@@ -64,48 +74,11 @@ if (!BOT_TOKEN) {
         }
       }
     } else if (!isGroupChat && ctx.message.text.toLowerCase() === "status") {
-        // Opcional: Logar ou responder algo se "status" for enviado fora de um grupo
-        console.log(`Comando "status" recebido como texto fora de um grupo (Chat ID: ${ctx.chat.id}, Tipo: ${ctx.chat.type}). Ignorando.`);
-        // ctx.reply("Por favor, use o comando '/status' no chat privado ou envie 'status' em um grupo."); // Exemplo de resposta
-    }
-
-  });
-
-  // Comando /status para o bot (mantido)
-  // Geralmente, comandos com / funcionam tanto em privado quanto em grupo.
-  // Você pode adicionar a mesma verificação de chat.type aqui se quiser
-  // que /status só funcione em grupos também, mas o padrão é funcionar em ambos.
-  bot.command("status", async (ctx) => {
-      console.log(`Comando /status recebido no chat ID: ${ctx.chat.id}, tipo: ${ctx.chat.type}`);
-
-      // Opcional: Adicionar verificação de tipo de chat aqui também se necessário
-      // if (ctx.chat.type !== 'group' && ctx.chat.type !== 'supergroup') {
-      //     return ctx.reply("Este comando funciona apenas em grupos.");
-      // }
-
-    try {
-      const rows = await db.getAllStoresStatus();
-
-      if (rows.length === 0) {
-        return ctx.reply("Nenhuma loja registrada ainda.");
-      }
-
-      let statusMessage = "Status das Lojas:\n";
-      rows.forEach((row) => {
-        const ultimoPing = row.ultimo_ping
-          ? new Date(row.ultimo_ping).toLocaleString()
-          : "Nunca pingou";
-        const statusEmoji = row.status === "online" ? "✅" : "❌";
-        statusMessage += `${statusEmoji} Loja ${row.loja_id}: ${row.status} (último ping: ${ultimoPing})\n`;
-      });
-
-      ctx.reply(statusMessage);
-    } catch (error) {
-      console.error(`Erro ao consultar status via Telegram (comando /status) no chat ${ctx.chat.id}:`, error.message);
-      ctx.reply("Erro ao consultar o status das lojas.");
-       if (TELEGRAM_CHAT_ID && String(ctx.chat.id) !== TELEGRAM_CHAT_ID) {
-           // await sendNotification(`🔴 ERRO! Falha ao obter status via Telegram (comando /status) no chat ${ctx.chat.id}: ${error.message}`);
-       }
+      // Opcional: Logar ou responder algo se "status" for enviado fora de um grupo
+      console.log(
+        `Comando "status" recebido como texto fora de um grupo (Chat ID: ${ctx.chat.id}, Tipo: ${ctx.chat.type}). Ignorando.`
+      );
+      // ctx.reply("Por favor, use o comando '/status' no chat privado ou envie 'status' em um grupo."); // Exemplo de resposta
     }
   });
 
